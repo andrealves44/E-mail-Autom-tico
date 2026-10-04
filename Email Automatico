@@ -1,0 +1,34 @@
+function enviarEmail() {
+  var destinatario = "andrealv444@gmail.com";
+  var assunto = "Email 08H";
+
+  var mensagem =
+    "Olá!\n\n" +
+    "Voce recebera um email toda segunda feira as 08h\n\n" +
+    "Atenciosamente,\n" +
+    "André Alves";
+
+  GmailApp.sendEmail(destinatario, assunto, mensagem);
+}
+
+
+function configurarAutomacao() {
+  // Remove acionadores antigos dessa função
+  var acionadores = ScriptApp.getProjectTriggers();
+
+  for (var i = 0; i < acionadores.length; i++) {
+    if (acionadores[i].getHandlerFunction() == "enviarEmail") {
+      ScriptApp.deleteTrigger(acionadores[i]);
+    }
+  }
+
+  // Cria um novo acionador para toda segunda-feira
+  ScriptApp.newTrigger("enviarEmail")
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.MONDAY)
+    
+    .atHour(8)
+    .create();
+
+  Logger.log("Automação configurada para toda segunda-feira às 08:00.");
+}
